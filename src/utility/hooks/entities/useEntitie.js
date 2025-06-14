@@ -2,18 +2,39 @@ import React, { useEffect, useState } from 'react'
 import bdAdmin from '../../../api/bdAdmin'
 import { getAuthHeaders } from '../../auth/auth'
 const URL = '/entities'
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import entitiesDefault from '../../constants/entitiesDefaults';
+const MySwal = withReactContent(Swal);
 export const useEntitie = () => {
     const [entities, setEntities] = useState([])
     const [dependencies, setDependencies] = useState([])
+    const [search, setSearch] = useState("");
+    const [filteredEntities, setFilteredEntities] = useState([]);
+    const [typesEntities, setTypesEntities] = useState()
+    const [refresh, setRefresh] = useState(false);
     useEffect(() => {
         bdAdmin.get(URL)
             .then(res => {
-                setEntities(res.data)
+                setEntities(res.data);
+                setFilteredEntities(res.data);
             })
             .catch(err => {
                 console.error("Error fetching entities:", err)
             })
+
+
+    }, [refresh])
+
+    useEffect(() => {
+        bdAdmin.get('/entity-types', getAuthHeaders())
+            .then(res => {
+                setTypesEntities(res.data)
+            })
+            .catch(err => console.log(err))
+
     }, [])
+
 
     const getDependencies = (dni) => {
         bdAdmin.get(`/dependencySearch?search=${dni}`)
@@ -27,15 +48,37 @@ export const useEntitie = () => {
             })
     }
 
-    const createEntity = (data) => {
+    const createEntity = (data, reset, toggle) => {
         bdAdmin.post(URL, data, getAuthHeaders())
             .then(res => {
-                return res.data
+                reset(entitiesDefault);
+                toggle();
+                setRefresh(!refresh);
+                MySwal.fire("Entidad creada", "", "success");
+
             })
             .catch(err => {
-                console.error(err)
+                const errors = err.response?.data?.errors;
+                if (errors?.ruc) {
+                    MySwal.fire("Error", "RUC ya registrado", "error");
+                } else {
+                    MySwal.fire("Error", "Ocurrió un error", "error");
+                }
+                console.error(errors);
             })
     }
+
+    useEffect(() => {
+        if (!search) {
+            setFilteredEntities(entities);
+        } else {
+            const filtered = entities.filter(entity =>
+                entity.description?.toLowerCase().includes(search.toLowerCase()) ||
+                entity.description?.toLowerCase().includes(search.toLowerCase())
+            );
+            setFilteredEntities(filtered);
+        }
+    }, [search, entities]);
 
     const getEntityById = (id, reset, toogleActualizacion) => {
         bdAdmin.get(`${URL}/${id}`, getAuthHeaders())
@@ -49,14 +92,15 @@ export const useEntitie = () => {
     const updateEntity = async (id, data, reset, toggle) => {
         try {
             await bdAdmin.put(`${URL}/${id}`, data, getAuthHeaders());
-            reset(clientesDefault);
+            reset(entitiesDefault);
             toggle();
             setRefresh(!refresh);
-            MySwal.fire("Entity actualizado", "", "success");
+            MySwal.fire("Entidad actualizado", "", "success");
         } catch {
             MySwal.fire("Error", "Contacte con soporte", "error");
         }
     };
+
 
 
     return {
@@ -65,6 +109,10 @@ export const useEntitie = () => {
         getDependencies,
         dependencies,
         getEntityById,
-        updateEntity
+        updateEntity,
+        setSearch,
+        search,
+        filteredEntities,
+        typesEntities
     }
 }

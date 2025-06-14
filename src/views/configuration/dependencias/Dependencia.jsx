@@ -1,8 +1,17 @@
 import React from 'react'
+import TablaDependencia from '../../../components/dependencies/TablaDependencia'
+import SearchDependencia from '../../../components/dependencies/SearchDependencia'
+import { useEntitie } from '../../../utility/hooks/entities/useEntitie'
 
 const Dependencia = () => {
+
   return (
-    <div>Dependencia</div>
+    <div>
+      Dependencias
+      <SearchDependencia />
+      <TablaDependencia />
+
+    </div>
   )
 }
 

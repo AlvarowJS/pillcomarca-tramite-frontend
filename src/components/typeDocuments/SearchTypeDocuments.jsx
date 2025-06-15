@@ -1,8 +1,14 @@
 import React from 'react'
 
-const SearchTypeDocuments = () => {
+const SearchTypeDocuments = ({ search, setSearch }) => {
   return (
-    <div>SearchTypeDocuments</div>
+    <input
+      type="text"
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      placeholder="Buscar tipo de documento..."
+      className="border p-2 rounded w-100"
+    />
   )
 }
 

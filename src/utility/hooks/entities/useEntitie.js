@@ -85,7 +85,6 @@ export const useEntitie = () => {
             .then(res => {
                 reset(res.data)
                 toogleActualizacion()
-                setRefresh(!refresh)
             })
             .catch(err => console.log(err))
     }

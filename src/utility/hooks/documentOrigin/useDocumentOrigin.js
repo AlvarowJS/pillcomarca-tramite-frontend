@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import bdAdmin from '../../../api/bdAdmin'
 import { getAuthHeaders } from '../../auth/auth'
-const URL = '/provided'
+const URL = '/document-origins'
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import providedDefault from '../../constants/providedsDefault';
-
+import documentOriginDefault from '../../constants/documentOriginDefault';
 const MySwal = withReactContent(Swal);
-
-export const useProvideds = () => {
-    const [provideds, setProvideds] = useState([])
+export const useDocumentOrigin = () => {
+    const [documentOrigins, setDocumentOrigins] = useState([])
     const [search, setSearch] = useState("");
     const [filtereds, setFiltereds] = useState([]);
     const [refresh, setRefresh] = useState(false);
@@ -17,7 +15,7 @@ export const useProvideds = () => {
     useEffect(() => {
         bdAdmin.get(URL, getAuthHeaders())
             .then(res => {
-                setProvideds(res.data);
+                setDocumentOrigins(res.data);
                 setFiltereds(res.data);
             })
             .catch(err => {
@@ -28,19 +26,19 @@ export const useProvideds = () => {
 
     useEffect(() => {
         if (!search) {
-            setFiltereds(provideds);
+            setFiltereds(documentOrigins);
         } else {
-            const filtered = provideds.filter(documenttype =>
-                documenttype.provided?.toLowerCase().includes(search.toLowerCase())
+            const filtered = documentOrigins.filter(origin =>
+                origin.origin?.toLowerCase().includes(search.toLowerCase())
             );
             setFiltereds(filtered);
         }
-    }, [search, provideds]);
+    }, [search, documentOrigins]);
 
-    const createProvided = (data, reset, toggle) => {
+    const createDocumentOrigin = (data, reset, toggle) => {
         bdAdmin.post(URL, data, getAuthHeaders())
             .then(res => {
-                reset(providedDefault);
+                reset(documentOriginDefault);
                 toggle();
                 setRefresh(!refresh);
                 MySwal.fire("Proveido creado", "", "success");
@@ -52,7 +50,7 @@ export const useProvideds = () => {
             })
     }
 
-    const getProvidedId = (id, reset, toogleActualizacion) => {
+    const getDocumentOriginId = (id, reset, toogleActualizacion) => {
         bdAdmin.get(`${URL}/${id}`, getAuthHeaders())
             .then(res => {
                 reset(res.data)
@@ -60,24 +58,24 @@ export const useProvideds = () => {
             })
             .catch(err => console.log(err))
     }
-    const updateProvided = async (id, data, reset, toggle) => {
+    const updateDocumentOrigin = async (id, data, reset, toggle) => {
         try {
             await bdAdmin.put(`${URL}/${id}`, data, getAuthHeaders());
-            reset(providedDefault);
+            reset(documentOriginDefault);
             toggle();
             setRefresh(!refresh);
-            MySwal.fire("Proveido actualizado", "", "success");
+            MySwal.fire("Documento de origen actualizado", "", "success");
         } catch {
             MySwal.fire("Error", "Contacte con soporte", "error");
         }
     };
     return {
-        provideds,
-        createProvided,
-        getProvidedId,
-        updateProvided,
+        documentOrigins,
+        createDocumentOrigin,
+        getDocumentOriginId,
+        updateDocumentOrigin,
         setSearch,
         search,
-        filtereds        
+        filtereds
     }
 }

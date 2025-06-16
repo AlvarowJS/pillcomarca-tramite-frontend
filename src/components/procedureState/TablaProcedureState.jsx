@@ -1,8 +1,9 @@
 import DataTable from 'react-data-table-component'
 import { Edit } from 'react-feather'
 
-const TablaProvideds = ({
-    provideds, getProvidedIdTable
+
+const TablaProcedureState = ({
+    procedures, getProcedureGetIdTable
 }) => {
     const columns = [
         {
@@ -20,11 +21,11 @@ const TablaProvideds = ({
             sortable: true,
             name: 'Tipo de proveido',
             minWidth: '25px',
-            selector: row => row?.provided,
+            selector: row => row?.state,
             cell: row => {
                 return (
                     <div>
-                        {row?.provided}
+                        {row?.state}
                     </div>
                 )
             }
@@ -40,7 +41,7 @@ const TablaProvideds = ({
                     <div className='d-flex gap-1 my-1'>
 
                         <button className='btn btn-warning'
-                            onClick={() => getProvidedIdTable(row?.id)}
+                            onClick={() => getProcedureGetIdTable(row?.id)}
                         >
                             <Edit />
                         </button>
@@ -56,10 +57,10 @@ const TablaProvideds = ({
             pagination
             className='react-datatable'
             columns={columns}
-            data={provideds}
+            data={procedures}
 
         />
     )
 }
 
-export default TablaProvideds
+export default TablaProcedureState

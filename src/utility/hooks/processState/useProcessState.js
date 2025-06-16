@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import bdAdmin from '../../../api/bdAdmin'
 import { getAuthHeaders } from '../../auth/auth'
-const URL = '/provided'
+const URL = '/process-states'
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import providedDefault from '../../constants/providedsDefault';
-
+import processStateDefault from '../../constants/processStateDefault';
 const MySwal = withReactContent(Swal);
 
-export const useProvideds = () => {
-    const [provideds, setProvideds] = useState([])
+export const useProcessState = () => {
+    const [data, setData] = useState([])
     const [search, setSearch] = useState("");
     const [filtereds, setFiltereds] = useState([]);
     const [refresh, setRefresh] = useState(false);
@@ -17,7 +16,7 @@ export const useProvideds = () => {
     useEffect(() => {
         bdAdmin.get(URL, getAuthHeaders())
             .then(res => {
-                setProvideds(res.data);
+                setData(res.data);
                 setFiltereds(res.data);
             })
             .catch(err => {
@@ -25,25 +24,24 @@ export const useProvideds = () => {
             })
     }, [refresh])
 
-
     useEffect(() => {
         if (!search) {
-            setFiltereds(provideds);
+            setFiltereds(data);
         } else {
-            const filtered = provideds.filter(documenttype =>
-                documenttype.provided?.toLowerCase().includes(search.toLowerCase())
+            const filtered = data.filter(process =>
+                process.condition?.toLowerCase().includes(search.toLowerCase())
             );
             setFiltereds(filtered);
         }
-    }, [search, provideds]);
+    }, [search, data]);
 
-    const createProvided = (data, reset, toggle) => {
+    const createProcessState = (data, reset, toggle) => {
         bdAdmin.post(URL, data, getAuthHeaders())
             .then(res => {
-                reset(providedDefault);
+                reset(processStateDefault);
                 toggle();
                 setRefresh(!refresh);
-                MySwal.fire("Proveido creado", "", "success");
+                MySwal.fire("Proceso de estado creada", "", "success");
 
             })
             .catch(err => {
@@ -52,32 +50,32 @@ export const useProvideds = () => {
             })
     }
 
-    const getProvidedId = (id, reset, toogleActualizacion) => {
+    const getProcessStateId = (id, reset, toogleActualizacion) => {
         bdAdmin.get(`${URL}/${id}`, getAuthHeaders())
             .then(res => {
                 reset(res.data)
-                toogleActualizacion()                
+                toogleActualizacion()
             })
             .catch(err => console.log(err))
     }
-    const updateProvided = async (id, data, reset, toggle) => {
+    const updateProcessState = async (id, data, reset, toggle) => {
         try {
             await bdAdmin.put(`${URL}/${id}`, data, getAuthHeaders());
-            reset(providedDefault);
+            reset(processStateDefault);
             toggle();
             setRefresh(!refresh);
-            MySwal.fire("Proveido actualizado", "", "success");
+            MySwal.fire("Estado de tramite actualizado", "", "success");
         } catch {
             MySwal.fire("Error", "Contacte con soporte", "error");
         }
     };
     return {
-        provideds,
-        createProvided,
-        getProvidedId,
-        updateProvided,
+        data,
+        createProcessState,
+        getProcessStateId,
+        updateProcessState,
         setSearch,
         search,
-        filtereds        
+        filtereds,
     }
 }

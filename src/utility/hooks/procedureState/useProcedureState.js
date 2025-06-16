@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import bdAdmin from '../../../api/bdAdmin'
 import { getAuthHeaders } from '../../auth/auth'
-const URL = '/provided'
+const URL = '/procedure-states'
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import providedDefault from '../../constants/providedsDefault';
-
+import procedureStateDefault from '../../constants/procedureStateDefault';
 const MySwal = withReactContent(Swal);
-
-export const useProvideds = () => {
-    const [provideds, setProvideds] = useState([])
+export const useProcedureState = () => {
+    const [procedureStates, setProcedureStates] = useState([])
     const [search, setSearch] = useState("");
     const [filtereds, setFiltereds] = useState([]);
     const [refresh, setRefresh] = useState(false);
@@ -17,7 +15,7 @@ export const useProvideds = () => {
     useEffect(() => {
         bdAdmin.get(URL, getAuthHeaders())
             .then(res => {
-                setProvideds(res.data);
+                setProcedureStates(res.data);
                 setFiltereds(res.data);
             })
             .catch(err => {
@@ -25,59 +23,64 @@ export const useProvideds = () => {
             })
     }, [refresh])
 
-
     useEffect(() => {
         if (!search) {
-            setFiltereds(provideds);
+            setFiltereds(procedureStates);
         } else {
-            const filtered = provideds.filter(documenttype =>
-                documenttype.provided?.toLowerCase().includes(search.toLowerCase())
+            const filtered = procedureStates.filter(procedure =>
+                procedure.state?.toLowerCase().includes(search.toLowerCase())
             );
             setFiltereds(filtered);
         }
-    }, [search, provideds]);
+    }, [search, procedureStates]);
 
-    const createProvided = (data, reset, toggle) => {
+    const createProcedureState = (data, reset, toggle) => {
         bdAdmin.post(URL, data, getAuthHeaders())
             .then(res => {
-                reset(providedDefault);
+                reset(procedureStateDefault);
                 toggle();
                 setRefresh(!refresh);
-                MySwal.fire("Proveido creado", "", "success");
+                MySwal.fire("Entidad creada", "", "success");
 
             })
             .catch(err => {
-                MySwal.fire("Error", "Ocurrió un error", "error");
+                const errors = err.response?.data?.errors;
+                if (errors?.ruc) {
+                    MySwal.fire("Error", "RUC ya registrado", "error");
+                } else {
+                    MySwal.fire("Error", "Ocurrió un error", "error");
+                }
                 console.error(errors);
             })
     }
 
-    const getProvidedId = (id, reset, toogleActualizacion) => {
+    const getProcedureStateId = (id, reset, toogleActualizacion) => {
         bdAdmin.get(`${URL}/${id}`, getAuthHeaders())
             .then(res => {
                 reset(res.data)
-                toogleActualizacion()                
+                toogleActualizacion()
             })
             .catch(err => console.log(err))
     }
-    const updateProvided = async (id, data, reset, toggle) => {
+    const updateProcedureState = async (id, data, reset, toggle) => {
         try {
             await bdAdmin.put(`${URL}/${id}`, data, getAuthHeaders());
-            reset(providedDefault);
+            reset(procedureStateDefault);
             toggle();
             setRefresh(!refresh);
-            MySwal.fire("Proveido actualizado", "", "success");
+            MySwal.fire("Estado de tramite actualizado", "", "success");
         } catch {
             MySwal.fire("Error", "Contacte con soporte", "error");
         }
     };
+
     return {
-        provideds,
-        createProvided,
-        getProvidedId,
-        updateProvided,
+        procedureStates,
+        createProcedureState,
+        getProcedureStateId,
+        updateProcedureState,
         setSearch,
         search,
-        filtereds        
+        filtereds,
     }
 }

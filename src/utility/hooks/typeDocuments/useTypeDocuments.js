@@ -70,8 +70,7 @@ const useTypeDocuments = () => {
         bdAdmin.get(`${URL}/${id}`, getAuthHeaders())
             .then(res => {
                 reset(res.data)
-                toogleActualizacion()
-                setRefresh(!refresh)
+                toogleActualizacion()                
             })
             .catch(err => console.log(err))
     }

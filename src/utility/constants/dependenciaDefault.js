@@ -1,4 +1,4 @@
-const depedenciaDefault = {
+const dependenciaDefault = {
     description: "",
     code: "",
     abbreviation: "",
@@ -10,4 +10,4 @@ const depedenciaDefault = {
     fullName: ""
 }
 
-export default depedenciaDefault
+export default dependenciaDefault

@@ -14,7 +14,7 @@ export const useDependencie = () => {
     const [entity, setEntity] = useState(5)
 
     useEffect(() => {
-        bdAdmin.get(`${URL}?entity=5`, getAuthHeaders())
+        bdAdmin.get(`${URL}?entity=${entity}`, getAuthHeaders())
             .then(res => {
                 setData(res.data);
                 setFiltereds(res.data);
@@ -61,7 +61,7 @@ export const useDependencie = () => {
     const updateDependencie = async (id, data, reset, toggle) => {
         try {
             await bdAdmin.put(`${URL}/${id}`, data, getAuthHeaders());
-            reset(processStateDefault);
+            reset(depend);
             toggle();
             setRefresh(!refresh);
             MySwal.fire("Dependencia actualizada", "", "success");
@@ -77,6 +77,8 @@ export const useDependencie = () => {
         updateDependencie,
         setSearch,
         search,
+        entity,
+        setEntity,
         filtereds,
     }
 }

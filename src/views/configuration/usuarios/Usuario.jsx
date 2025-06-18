@@ -25,7 +25,7 @@ const Usuario = () => {
     search,
     searchUser
   } = useUser()
-
+  
   const toggle = () => {
 
     setActualizacion(false);

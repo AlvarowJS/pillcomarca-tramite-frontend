@@ -13,8 +13,8 @@ export const useDependencie = () => {
     const [refresh, setRefresh] = useState(false);
     const [entity, setEntity] = useState(5)
 
-    useEffect(() => {
-        bdAdmin.get(`${URL}?entity=${entity}`, getAuthHeaders())
+    useEffect(() => {        
+        bdAdmin.get(`${URL}?entity=${entity.value ?? entity }`, getAuthHeaders())
             .then(res => {
                 setData(res.data);
                 setFiltereds(res.data);
@@ -22,7 +22,7 @@ export const useDependencie = () => {
             .catch(err => {
                 console.error("Error fetching entities:", err)
             })
-    }, [refresh])
+    }, [refresh, entity])
 
     useEffect(() => {
         if (!search) {
@@ -41,7 +41,7 @@ export const useDependencie = () => {
                 reset(processStateDefault);
                 toggle();
                 setRefresh(!refresh);
-                MySwal.fire("Proceso de estado creada", "", "success");
+                MySwal.fire("Dependencia creada", "", "success");
 
             })
             .catch(err => {

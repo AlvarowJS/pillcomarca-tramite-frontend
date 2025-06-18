@@ -14,17 +14,43 @@ const TablaDependencia = ({
       ),
       minWidth: '35px',
       maxWidth: '100px',
-      selector: row => row?.id
+      selector: row => row?.code
     },
     {
       sortable: true,
-      name: 'Tipo de documento',
+      name: 'Unidad Organica',
       minWidth: '25px',
-      selector: row => row?.type,
+      selector: row => row?.description,
       cell: row => {
         return (
           <div>
-            {row?.type}
+            {row?.description}
+          </div>
+        )
+      }
+    },
+    {
+      sortable: true,
+      name: 'Dependencia',
+      minWidth: '25px',
+      selector: row => row?.dependency,
+      cell: row => {
+        return (
+          <div>
+            {row?.dependency}
+          </div>
+        )
+      }
+    },
+    {
+      sortable: true,
+      name: 'Responsable',
+      minWidth: '25px',
+      selector: row => row?.fullName,
+      cell: row => {
+        return (
+          <div>
+            {row?.fullName}
           </div>
         )
       }
@@ -56,7 +82,7 @@ const TablaDependencia = ({
       pagination
       className='react-datatable'
       columns={columns}
-      data={typeDocuments}
+      data={data}
 
     />
   )

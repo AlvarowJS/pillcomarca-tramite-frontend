@@ -7,6 +7,7 @@ import SearchDependencia from '../../../components/dependencies/SearchDependenci
 import { useDependencie } from '../../../utility/hooks/dependencies/useDependencie'
 import dependenciaDefault from '../../../utility/constants/dependenciaDefault';
 import FormDependencia from '../../../components/dependencies/FormDependencia';
+import { useEntitie } from '../../../utility/hooks/entities/useEntitie';
 
 const Dependencia = () => {
   const { handleSubmit, register, reset, formState: { errors } } = useForm();
@@ -22,9 +23,12 @@ const Dependencia = () => {
     search,
     entity,
     setEntity,
-    filtereds,
+    filtereds
   } = useDependencie()
 
+  const {
+    entitiesOptions
+  } = useEntitie()
   const toggle = () => {
 
     setActualizacion(false);
@@ -55,7 +59,9 @@ const Dependencia = () => {
           <SearchDependencia
             search={search}
             setSearch={setSearch}
+            entity={entity}
             setEntity={setEntity}
+            entitiesOptions={entitiesOptions}
           />
         </Col>
         <Col sm="2">

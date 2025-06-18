@@ -35,6 +35,10 @@ export const useEntitie = () => {
 
     }, [])
 
+    const entitiesOptions = entities?.map(option => ({
+        value: option?.id,
+        label: option?.description
+    }))
 
     const getDependencies = (dni) => {
         bdAdmin.get(`/dependencySearch?search=${dni}`)
@@ -112,6 +116,7 @@ export const useEntitie = () => {
         setSearch,
         search,
         filteredEntities,
-        typesEntities
+        typesEntities,
+        entitiesOptions
     }
 }

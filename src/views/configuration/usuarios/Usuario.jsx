@@ -7,11 +7,15 @@ import TablaUsers from '../../../components/users/TablaUsers'
 import userDefault from '../../../utility/constants/userDefault'
 import FormUsers from '../../../components/users/FormUsers';
 import SearchUsers from '../../../components/users/SearchUsers';
+import FormAsigmentUser from '../../../components/users/FormAsigmentUser';
 
 const Usuario = () => {
   const { handleSubmit, register, reset, formState: { errors } } = useForm();
+  const { handleSubmit: handleSubmitAsignment, register: registerAsignement, reset: resetAsignement } = useForm();
   const [modal, setModal] = useState(false);
   const [actualizacion, setActualizacion] = useState(false);
+  
+  const [modalAsignacion, setModalAsignacion] = useState(false)
   const {
     data,
     loading,
@@ -23,15 +27,18 @@ const Usuario = () => {
     updateUser,
     setSearch,
     search,
-    searchUser
+    searchUser,getAsignmentId
   } = useUser()
-  
-  const toggle = () => {
 
+  const toggle = () => {
     setActualizacion(false);
     reset(userDefault);
     setModal(!modal);
   };
+
+  const toggleAsignment = () => {
+    setModalAsignacion(!modalAsignacion)
+  }
 
   const toggleActualizacion = () => {
     setActualizacion(true)
@@ -41,6 +48,10 @@ const Usuario = () => {
   const getUserTablaId = (id) => {
     getUserId(id, reset, toggleActualizacion)
   }
+
+  const getAsignmentTablaId = (id) => {
+    getAsignmentId(id, toggleAsignment)
+  }
   const submit = (data) => {
     if (actualizacion) {
       updateUser(data.id, data, reset, toggle);
@@ -48,13 +59,17 @@ const Usuario = () => {
       createUser(data, reset, toggle);
     }
   };
+
+  const submitAsignment = () => {
+
+  }
   return (
     <div>
       <h1>Usuarios</h1>
       <Row className="my-2">
         <Col sm="10">
           <SearchUsers
-            search={search} 
+            search={search}
             setSearch={setSearch}
             searchUser={searchUser}
           />
@@ -81,6 +96,14 @@ const Usuario = () => {
         register={register}
         reset={reset}
         errors={errors}
+      />
+      <FormAsigmentUser 
+        toggle={toggleAsignment}
+        modal={modalAsignacion}
+        handleSubmit={handleSubmitAsignment}
+        submit={submitAsignment}
+        register={registerAsignement}
+        reset={resetAsignement}
       />
     </div>
   )

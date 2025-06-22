@@ -1,8 +1,10 @@
 import { Col, Modal, ModalBody, ModalHeader, Row } from 'reactstrap'
+import { useIdentificationDocument } from '../../utility/hooks/identificationDocuments/useIdentificationDocument'
 
 const FormUsers = ({
     modal, toggle, handleSubmit, register, submit, toggleActualizacion, errors, documentDetails
 }) => {
+    const { identifications } = useIdentificationDocument()
     return (
         <Modal isOpen={modal} toggle={toggle || toggleActualizacion} size='lg'>
             <ModalHeader>
@@ -13,11 +15,11 @@ const FormUsers = ({
                     <Row className="mb-1">
                         <Col>
                             <div className='form-group'>
-                                <label htmlFor="nombre_completo">Tipo de Entidad</label>
-                                <select className='form-select' id='detail_document_type_id' {...register("detail_document_type_id")}>
+                                <label htmlFor="nombre_completo">Tipo de documento</label>
+                                <select className='form-select' id='identification_document_id' {...register("identification_document_id")}>
                                     {
-                                        documentDetails?.map(detail => (
-                                            <option key={detail?.id} value={detail?.id}>{detail?.detail}</option>
+                                        identifications?.map(identification => (
+                                            <option key={identification?.id} value={identification?.id}>{identification?.document}</option>
                                         ))
                                     }
                                 </select>

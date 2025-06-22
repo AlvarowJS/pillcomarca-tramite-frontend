@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import bdAdmin from '../../../api/bdAdmin'
 import { getAuthHeaders } from '../../auth/auth'
 const URL = '/users'
+const URLASIG = '/charge-assignments'
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import userDefault from '../../constants/userDefault';
@@ -64,6 +65,13 @@ export const useUser = () => {
             })
             .catch(err => console.log(err))
     }
+
+    const getAsignmentId = (id, toggleAsignment) => {
+        bdAdmin.get(`${URLASIG}/${id}`, getAuthHeaders())
+            .then(res => {
+                toggleAsignment()
+            })
+    }
     const updateUser = async (id, data, reset, toggle) => {
         try {
             await bdAdmin.put(`${URL}/${id}`, data, getAuthHeaders());
@@ -88,6 +96,7 @@ export const useUser = () => {
         updateUser,
         setSearch,
         search,
-        searchUser
+        searchUser,
+        getAsignmentId
     }
 }

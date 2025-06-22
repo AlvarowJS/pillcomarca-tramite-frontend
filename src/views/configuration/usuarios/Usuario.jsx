@@ -14,7 +14,7 @@ const Usuario = () => {
   const { handleSubmit: handleSubmitAsignment, register: registerAsignement, reset: resetAsignement } = useForm();
   const [modal, setModal] = useState(false);
   const [actualizacion, setActualizacion] = useState(false);
-  
+
   const [modalAsignacion, setModalAsignacion] = useState(false)
   const {
     data,
@@ -27,7 +27,8 @@ const Usuario = () => {
     updateUser,
     setSearch,
     search,
-    searchUser,getAsignmentId
+    searchUser, 
+    getAsignmentId
   } = useUser()
 
   const toggle = () => {
@@ -60,8 +61,8 @@ const Usuario = () => {
     }
   };
 
-  const submitAsignment = () => {
-
+  const submitAsignment = (data) => {
+    console.log(data)
   }
   return (
     <div>
@@ -87,6 +88,7 @@ const Usuario = () => {
         handlePerRowsChange={handlePerRowsChange}
         handlePageChange={handlePageChange}
         getUserTablaId={getUserTablaId}
+        getAsignmentTablaId={getAsignmentTablaId}
       />
       <FormUsers
         toggle={toggle}
@@ -97,7 +99,7 @@ const Usuario = () => {
         reset={reset}
         errors={errors}
       />
-      <FormAsigmentUser 
+      <FormAsigmentUser
         toggle={toggleAsignment}
         modal={modalAsignacion}
         handleSubmit={handleSubmitAsignment}

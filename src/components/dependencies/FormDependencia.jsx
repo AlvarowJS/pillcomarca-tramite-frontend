@@ -5,7 +5,7 @@ const FormDependencia = ({
   modal, toggle, handleSubmit, register, submit, toggleActualizacion, errors, documentDetails
 }) => {
 
-  const { entities } = useEntitie()
+  const { entities,typesEntities } = useEntitie()
   return (
     <Modal isOpen={modal} toggle={toggle || toggleActualizacion} size='lg'>
       <ModalHeader>
@@ -29,8 +29,8 @@ const FormDependencia = ({
                 <label htmlFor="dependency_type_id">Tipo</label>
                 <select className='form-select' id='dependency_type_id' {...register("dependency_type_id")}>
                   {
-                    entities?.map(detail => (
-                      <option key={detail?.id} value={detail?.id}>{detail?.detail}</option>
+                    typesEntities?.map(type => (
+                      <option key={type?.id} value={type?.id}>{type?.type}</option>
                     ))
                   }
                 </select>

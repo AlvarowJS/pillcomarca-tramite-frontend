@@ -12,9 +12,10 @@ export const useDependencie = () => {
     const [filtereds, setFiltereds] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [entity, setEntity] = useState(5)
+    const [dependencies, setDependencies] = useState()
 
-    useEffect(() => {        
-        bdAdmin.get(`${URL}?entity=${entity.value ?? entity }`, getAuthHeaders())
+    useEffect(() => {
+        bdAdmin.get(`${URL}?entity=${entity.value ?? entity}`, getAuthHeaders())
             .then(res => {
                 setData(res.data);
                 setFiltereds(res.data);
@@ -23,6 +24,11 @@ export const useDependencie = () => {
                 console.error("Error fetching entities:", err)
             })
     }, [refresh, entity])
+
+    const dependenciesOptions = data?.map(option => ({
+        value: option?.id,
+        label: option?.description
+    }))
 
     useEffect(() => {
         if (!search) {
@@ -80,5 +86,8 @@ export const useDependencie = () => {
         entity,
         setEntity,
         filtereds,
+        dependenciesOptions,
+        setDependencies,
+        dependencies
     }
 }

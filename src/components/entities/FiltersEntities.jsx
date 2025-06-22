@@ -8,7 +8,7 @@ const FiltersEntities = ({ search, setSearch }) => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar entidad..."
-            className="border p-2 rounded w-100"
+            className="border p-1 rounded w-100"
         />
 
     )

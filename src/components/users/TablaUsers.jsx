@@ -3,7 +3,7 @@ import { Edit, Trash, UserCheck } from 'react-feather'
 
 
 const TablaUsers = ({
-  data, loading, totalRows, handlePerRowsChange, handlePageChange, getUserTablaId
+  data, loading, totalRows, handlePerRowsChange, handlePageChange, getUserTablaId, getAsignmentTablaId
 }) => {
   const columns = [
     {
@@ -94,7 +94,7 @@ const TablaUsers = ({
               <Edit size={10} />
             </button>
             <button className='btn btn-outline-success btn-sm'
-              onClick={() => getUserTablaId(row?.id)}
+              onClick={() => getAsignmentTablaId(row?.id)}
             >
               Asignar
               <UserCheck size={10} />

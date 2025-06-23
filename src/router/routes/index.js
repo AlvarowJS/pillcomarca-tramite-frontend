@@ -29,6 +29,8 @@ import Proveido from "../../views/configuration/proveidos/Proveido";
 import EstadoTramite from "../../views/configuration/estadoTramite/EstadoTramite";
 import Procedimiento from "../../views/configuration/procedimientos/Procedimiento";
 import Archivado from "../../views/documents/archivados/Archivado";
+import DocumentoExternos from "../../views/gestion/externos/DocumentoExternos";
+import DocumentoInternos from "../../views/gestion/internos/DocumentoInternos";
 
 
 // import OperacionesTrans from "../../views/operaciones/OperacionesTrans";
@@ -95,6 +97,15 @@ const Routes = [
   {
     path: "/documentos/archivados",
     element: <AuthGuard><Archivado /></AuthGuard>
+  },
+  //Gestion
+  {
+    path: "/gestion/documentos-externos",
+    element: <AuthGuard><DocumentoExternos /></AuthGuard>
+  },
+  {
+    path: "/gestion/documentos-internos",
+    element: <AuthGuard><DocumentoInternos /></AuthGuard>
   },
   // Configuracion
   {

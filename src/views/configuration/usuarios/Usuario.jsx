@@ -8,6 +8,7 @@ import userDefault from '../../../utility/constants/userDefault'
 import FormUsers from '../../../components/users/FormUsers';
 import SearchUsers from '../../../components/users/SearchUsers';
 import FormAsigmentUser from '../../../components/users/FormAsigmentUser';
+import { useCharges } from '../../../utility/hooks/charge/useCharges';
 
 const Usuario = () => {
   const { handleSubmit, register, reset, formState: { errors } } = useForm();
@@ -27,10 +28,11 @@ const Usuario = () => {
     updateUser,
     setSearch,
     search,
-    searchUser, 
+    searchUser,
     getAsignmentId
   } = useUser()
 
+  const { getChargesForUser, charges } = useCharges()
   const toggle = () => {
     setActualizacion(false);
     reset(userDefault);
@@ -52,6 +54,7 @@ const Usuario = () => {
 
   const getAsignmentTablaId = (id) => {
     getAsignmentId(id, toggleAsignment)
+    getChargesForUser(id)
   }
   const submit = (data) => {
     if (actualizacion) {
@@ -106,6 +109,7 @@ const Usuario = () => {
         submit={submitAsignment}
         register={registerAsignement}
         reset={resetAsignement}
+        charges={charges}
       />
     </div>
   )

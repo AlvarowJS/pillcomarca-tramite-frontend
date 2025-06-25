@@ -105,7 +105,7 @@ const FormUsers = ({
                         </Col>
                     </Row>
                     <button className='btn btn-primary my-2'>Enviar</button>
-                </form>
+                </form>            
             </ModalBody>
         </Modal >
     )

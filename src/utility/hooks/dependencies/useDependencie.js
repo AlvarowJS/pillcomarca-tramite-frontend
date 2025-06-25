@@ -29,6 +29,10 @@ export const useDependencie = () => {
         value: option?.id,
         label: option?.description
     }))
+    const filteredDependenciesOptions = filtereds?.map(option => ({
+        value: option?.id,
+        label: option?.description
+    }))
 
     useEffect(() => {
         if (!search) {
@@ -88,6 +92,7 @@ export const useDependencie = () => {
         filtereds,
         dependenciesOptions,
         setDependencies,
-        dependencies
+        dependencies,
+        filteredDependenciesOptions
     }
 }

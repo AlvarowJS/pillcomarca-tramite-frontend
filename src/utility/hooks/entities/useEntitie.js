@@ -13,6 +13,7 @@ export const useEntitie = () => {
     const [filteredEntities, setFilteredEntities] = useState([]);
     const [typesEntities, setTypesEntities] = useState()
     const [refresh, setRefresh] = useState(false);
+    const [entity, setEntity] = useState()
     useEffect(() => {
         bdAdmin.get(URL)
             .then(res => {
@@ -117,6 +118,8 @@ export const useEntitie = () => {
         search,
         filteredEntities,
         typesEntities,
-        entitiesOptions
+        entitiesOptions,
+        entity,
+        setEntity 
     }
 }

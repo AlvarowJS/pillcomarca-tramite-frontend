@@ -7,11 +7,13 @@ import { useEntitie } from '../../utility/hooks/entities/useEntitie';
 
 
 const FormAsigmentUser = ({
-    modal, toggle, handleSubmit, register, submit, charges
+    modal, toggle, handleSubmit, register, submit, charges,
+    dependenciesOptions, dependencies, setDependencies,
+    filteredDependenciesOptions, setEntity, entity,
+    dependenciesDefaultOptions, entitiesOptions,
+    selectedOption, setSelectedOption
 }) => {
-    const [selectedOption, setSelectedOption] = useState("internas"); // valor por defecto    
-    const { dependenciesOptions, dependencies, setDependencies, filteredDependenciesOptions, setEntity, entity } = useDependencie()
-    const { entitiesOptions } = useEntitie()
+    
 
     return (
         <Modal isOpen={modal} toggle={toggle || toggleActualizacion} size='xl'>
@@ -80,7 +82,7 @@ const FormAsigmentUser = ({
                                             id="search"
                                             value={dependencies}
                                             onChange={setDependencies}
-                                            options={dependenciesOptions}
+                                            options={dependenciesDefaultOptions}
                                             isSearchable={true}
                                             placeholder="No especifica"
                                         // className='w-50'
@@ -94,7 +96,7 @@ const FormAsigmentUser = ({
                                             className="form-control"
                                             type="text"
                                             placeholder='Ingrese el Cargo'
-                                            {...register('dni')}
+                                            {...register('charge')}
                                             required
                                         />
                                     </div>
@@ -103,24 +105,24 @@ const FormAsigmentUser = ({
                             <Row className="mb-1">
                                 <Col>
                                     <div className='form-group'>
-                                        <label htmlFor="firstName">Documento sustentario</label>
+                                        <label htmlFor="detail">Documento sustentario</label>
                                         <input
                                             className="form-control"
                                             type="text"
-                                            placeholder='Nombre de la persona'
-                                            {...register('firstName')}
+                                            placeholder='Memorandum, contradto u otro documento'
+                                            {...register('detail')}
                                             required
                                         />
                                     </div>
                                 </Col>
                                 <Col>
                                     <div className='form-group'>
-                                        <label htmlFor="lastName">Fecha de Inicio de Contrato</label>
+                                        <label htmlFor="startDate">Fecha de Inicio de Contrato</label>
                                         <input
                                             className="form-control"
                                             type="date"
                                             placeholder='Apellidos de la Persona'
-                                            {...register('lastName')}
+                                            {...register('startDate')}
                                             required
                                         />
                                     </div>
@@ -129,12 +131,12 @@ const FormAsigmentUser = ({
                             <Row className="mb-1">
                                 <Col>
                                     <div className='form-group'>
-                                        <label htmlFor="phone">Fecha de Fin de Contrato</label>
+                                        <label htmlFor="finalDate">Fecha de Fin de Contrato</label>
                                         <input
                                             className="form-control"
                                             type="date"
                                             placeholder='Ingrese el telefono o celular'
-                                            {...register('phone')}
+                                            {...register('finalDate')}
 
                                         />
                                     </div>
@@ -142,7 +144,7 @@ const FormAsigmentUser = ({
                                 <Col>
                                     <div className='form-group'>
                                         <label htmlFor="email">Role</label>
-                                        <select className="form-select" id="charge_state_id" {...register('role_id')}  >
+                                        <select className="form-select" id="role_id" {...register('role_id')}  >
                                             <option value="2">Administrador del sistema</option>
                                             <option value="3" selected>Usuario Interno</option>
                                         </select>
@@ -166,42 +168,52 @@ const FormAsigmentUser = ({
                             <Row className="mb-1">
                                 <Col>
                                     <div className='form-group'>
-                                        <label htmlFor="nombre_completo">Asignar Dependencia</label>
-                                        <Select
-                                            id="search"
-                                            value={dependencies}
-                                            onChange={setDependencies}
-                                            options={dependenciesOptions}
-                                            isSearchable={true}
-                                            placeholder="No especifica"
-                                        // className='w-50'
+                                        <label htmlFor="charge_state_display">Asignar Dependencia</label>
+                                        <input
+                                            className="form-control"
+                                            id="charge_state_display"
+                                            value="Usuario Externo"
+                                            disabled
+                                        />
+                                        <input
+                                            type="hidden"
+                                            value="46"
+                                            {...register('charge_state_id')}
                                         />
                                     </div>
                                 </Col>
                                 <Col>
                                     <div className='form-group'>
-                                        <label htmlFor="role_id">Role</label>
-                                        <select className="form-select" id="charge_state_id" {...register('role_id')}  >
-                                            <option value="4" selected>Usuario Externo</option>
-                                        </select>
+                                        <label htmlFor="role_display">Role</label>
+                                        <input
+                                            className="form-control"
+                                            id="role_display"
+                                            value="Usuario Externo"
+                                            disabled
+                                        />
+                                        <input
+                                            type="hidden"
+                                            value="4"
+                                            {...register('role_id')}
+                                        />
                                     </div>
                                 </Col>
                             </Row>
+
                             <Row className="mb-1">
                                 <Col>
                                     <div className='form-group'>
                                         <label htmlFor="state">Estado</label>
-                                        <select className="form-select" id="charge_state_id" {...register('charge_state_id')}  >
+                                        <select className="form-select" id="state" {...register('charge_state_id')}>
                                             <option value="1" selected>Activo</option>
                                             <option value="2">Inactivo</option>
                                         </select>
                                     </div>
                                 </Col>
-                                <Col>
-                                </Col>
+                                <Col></Col>
                             </Row>
-
                         </>
+
                     )}
                     {selectedOption === "externo" && (
                         <>
@@ -239,9 +251,17 @@ const FormAsigmentUser = ({
                                 <Col>
                                     <div className='form-group'>
                                         <label htmlFor="state">Role</label>
-                                        <select className="form-select" id="charge_state_id" {...register('role_id')}  >
-                                            <option value="4" selected>Usuario Externo</option>
-                                        </select>
+                                        <input
+                                            className="form-control"
+                                            id="role_display"
+                                            value="Usuario Externo"
+                                            disabled
+                                        />
+                                        <input
+                                            type="hidden"
+                                            value="4"
+                                            {...register('role_id')}
+                                        />
                                     </div>
                                 </Col>
                                 <Col>
@@ -257,7 +277,7 @@ const FormAsigmentUser = ({
 
                         </>
                     )}
-                    <button className='btn btn-primary my-2'>Enviar</button>
+                    <button className='btn btn-primary my-2'>Asignar</button>
                 </form>
                 <ListAsignmentUser
                     charges={charges}

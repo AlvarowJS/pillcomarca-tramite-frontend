@@ -13,17 +13,27 @@ export const useDependencie = () => {
     const [refresh, setRefresh] = useState(false);
     const [entity, setEntity] = useState(5)
     const [dependencies, setDependencies] = useState()
+    const [dependenciDefault, setDependenciDefault] = useState()
 
     useEffect(() => {
         bdAdmin.get(`${URL}?entity=${entity.value ?? entity}`, getAuthHeaders())
             .then(res => {
                 setData(res.data);
                 setFiltereds(res.data);
+                if ((entity.value ?? entity) === 5 && !dependenciDefault) {
+                    setDependenciDefault(res.data);
+                }
             })
             .catch(err => {
                 console.error("Error fetching entities:", err)
             })
     }, [refresh, entity])
+
+
+    const dependenciesDefaultOptions = dependenciDefault?.map(option => ({
+        value: option?.id,
+        label: option?.description
+    }))
 
     const dependenciesOptions = data?.map(option => ({
         value: option?.id,
@@ -93,6 +103,7 @@ export const useDependencie = () => {
         dependenciesOptions,
         setDependencies,
         dependencies,
-        filteredDependenciesOptions
+        filteredDependenciesOptions,
+        dependenciesDefaultOptions,
     }
 }

@@ -9,12 +9,16 @@ import FormUsers from '../../../components/users/FormUsers';
 import SearchUsers from '../../../components/users/SearchUsers';
 import FormAsigmentUser from '../../../components/users/FormAsigmentUser';
 import { useCharges } from '../../../utility/hooks/charge/useCharges';
+import { useDependencie } from '../../../utility/hooks/dependencies/useDependencie';
+import { useEntitie } from '../../../utility/hooks/entities/useEntitie';
 
 const Usuario = () => {
   const { handleSubmit, register, reset, formState: { errors } } = useForm();
   const { handleSubmit: handleSubmitAsignment, register: registerAsignement, reset: resetAsignement } = useForm();
   const [modal, setModal] = useState(false);
   const [actualizacion, setActualizacion] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("internas");
+  const [userIdAsignment, setUserIdAsignment] = useState(null);
 
   const [modalAsignacion, setModalAsignacion] = useState(false)
   const {
@@ -31,6 +35,11 @@ const Usuario = () => {
     searchUser,
     getAsignmentId
   } = useUser()
+
+  const { dependenciesOptions, dependencies, setDependencies,
+    filteredDependenciesOptions, setEntity, entity,
+    dependenciesDefaultOptions } = useDependencie()
+  const { entitiesOptions } = useEntitie()
 
   const { getChargesForUser, charges } = useCharges()
   const toggle = () => {
@@ -55,6 +64,7 @@ const Usuario = () => {
   const getAsignmentTablaId = (id) => {
     getAsignmentId(id, toggleAsignment)
     getChargesForUser(id)
+    setUserIdAsignment(id);
   }
   const submit = (data) => {
     if (actualizacion) {
@@ -65,8 +75,41 @@ const Usuario = () => {
   };
 
   const submitAsignment = (data) => {
-    console.log(data)
+    try {
+      const payload = {
+        user_id: userIdAsignment,
+        dependency_id: dependencies?.value,
+        entity_id: entity?.value,
+        ...data
+      };
+
+      // Limpiar campos según el tipo seleccionado
+      if (selectedOption === 'internas') {
+        delete payload.role_id;
+        delete payload.charge_state_id;
+      }
+
+      if (selectedOption === 'usuario') {
+        delete payload.charge;
+        delete payload.detail;
+        delete payload.startDate;
+        delete payload.finalDate;
+        delete payload.entity_id; // no se usa
+      }
+
+      if (selectedOption === 'externo') {
+        delete payload.charge;
+        delete payload.detail;
+        delete payload.startDate;
+        delete payload.finalDate;
+      }
+    } catch (error) {
+      console.error("Error al asignar:", error);
+      Swal.fire("Error", "No se pudo asignar el cargo. Intente nuevamente.", "error");
+    }
+    console.log(data, "As")
   }
+
   return (
     <div>
       <h1>Usuarios</h1>
@@ -110,6 +153,16 @@ const Usuario = () => {
         register={registerAsignement}
         reset={resetAsignement}
         charges={charges}
+        dependenciesOptions={dependenciesOptions}
+        dependencies={dependencies}
+        setDependencies={setDependencies}
+        filteredDependenciesOptions={filteredDependenciesOptions}
+        setEntity={setEntity}
+        entity={entity}
+        dependenciesDefaultOptions={dependenciesDefaultOptions}
+        entitiesOptions={entitiesOptions}
+        selectedOption={selectedOption}
+        setSelectedOption={setSelectedOption}
       />
     </div>
   )
